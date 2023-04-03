@@ -5,6 +5,16 @@ import { Container, Table } from 'react-bootstrap';
 const mds = data.MovieData;
 
 function MovieList() {
+  //can use this in the future to filter the movies
+  // Filter the movies by the "Edited" property
+  // const editedMovies = mds.filter((m) => m.Edited === "Yes");
+
+  // Sort the resulting array alphabetically by title
+  //editedMovies.sort((a, b) => a.Title.localeCompare(b.Title));
+
+  const editedMovies = mds;
+  
+
   return (
     <Container>
       <div className="my-4">
@@ -23,7 +33,7 @@ function MovieList() {
             </tr>
           </thead>
           <tbody>
-            {mds.map((m) => {
+            {editedMovies.map((m) => {
               return (
                 <tr key={m.Title}>
                   <td>{m.Title}</td>
