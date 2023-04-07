@@ -1,19 +1,36 @@
-import React from 'react';
-import data from './MovieData.json';
+import React, { useState, useEffect } from 'react';
 import { Container, Table } from 'react-bootstrap';
 
-const mds = data.MovieData;
+interface Movie {
+  movieId: number;
+  category: string | null;
+  title: string | null;
+  year: number | null;
+  director: string | null;
+  rating: string | null;
+  edited: boolean | null;
+  lentTo: string | null;
+  notes: string | null;
+}
 
 function MovieList() {
-  //can use this in the future to filter the movies
-  // Filter the movies by the "Edited" property
-  // const editedMovies = mds.filter((m) => m.Edited === "Yes");
+  const [movies, setMovies] = useState<Movie[]>([]);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await fetch('https://localhost:4000/Values');
+        const data = await response.json();
+        setMovies(data);
+      } catch (error) {
+        console.error('Error fetching movie data:', error);
+      }
+    };
+    fetchMovies();
+  }, []);
 
   // Sort the resulting array alphabetically by title
-  //editedMovies.sort((a, b) => a.Title.localeCompare(b.Title));
-
-  const editedMovies = mds;
-  
+  movies.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
 
   return (
     <Container>
@@ -33,15 +50,15 @@ function MovieList() {
             </tr>
           </thead>
           <tbody>
-            {editedMovies.map((m) => {
+            {movies.map((m) => {
               return (
-                <tr key={m.Title}>
-                  <td>{m.Title}</td>
-                  <td>{m.Year}</td>
-                  <td>{m.Director}</td>
-                  <td>{m.Rating}</td>
-                  <td>{m.Category}</td>
-                  <td>{m.Edited}</td>
+                <tr key={m.movieId}>
+                  <td>{m.title}</td>
+                  <td>{m.year}</td>
+                  <td>{m.director}</td>
+                  <td>{m.rating}</td>
+                  <td>{m.category}</td>
+                  <td>{m.edited ? 'Yes' : 'No'}</td>
                 </tr>
               );
             })}
